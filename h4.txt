@@ -1,0 +1,46 @@
+weather_data.txt 
+2024-08-01,Rainy 
+2024-08-02,Sunny 
+2024-08-03,Rainy 
+2024-08-04,Cloudy 
+ 
+weather_mapper.py 
+import sys 
+for line in sys.stdin: 
+    line=line.strip() 
+    date, weather=line.split(',') 
+    print(f"{weather}\t1") 
+ 
+weather_reducere.py 
+import sys 
+current_weather=None 
+current_count=0 
+ 
+for line in sys.stdin: 
+    line=line.strip() 
+    weather, count=line.split('\t',1) 
+    count=int(count) 
+ 
+    if current_weather == weather: 
+        count_count += count 
+ 
+    else: 
+        if current_weather: 
+            print(f"{current_weather}\t{current_count}") 
+        current_weather = weather 
+        current_count = count 
+ 
+if current_weather == weather: 
+    print(f"{current_weather}\t{current_count}") 
+ 
+Command: 
+C:\Windows\system32>hdfs dfs -mkdir /wc 
+C:\Windows\system32>hdfs dfs -put D:\weather_data.txt /wc 
+C:\Windows\system32>hdfs dfs -put D:\weather_mapper.py /wc 
+C:\Windows\system32>hdfs dfs -put D:\weather_reducer.py /wc 
+C:\Windows\system32>hadoop jar C:\hadoop\share\hadoop\tools\lib\hadoop-streaming
+3.2.4.jar ^ 
+More?   -input /wc/weather_data.txt ^ 
+More?   -output /weather_output ^ 
+More?   -mapper /weather_mapper.py ^ 
+More?   -reducer /weather_reducer.py 

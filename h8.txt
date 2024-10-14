@@ -1,0 +1,46 @@
+ 
+twitter_data.txt 
+2024-08-01,#hadoop 
+2024-08-01,#bigdata 
+2024-08-02,#hadoop 
+2024-08-03,#ai 
+ 
+twitter_mapper.py 
+import sys 
+for line in sys.stdin: 
+    line = line.strip() 
+    date, hashtag = line.split(',') 
+    print(f"{hashtag}\t1") 
+ 
+twitter_reducer.py 
+import sys 
+current_hashtag = None 
+current_count = 0 
+ 
+for line in sys.stdin: 
+    line = line.strip() 
+    hashtag, count = line.split('\t') 
+    count = int(count) 
+ 
+    if current_hashtag == hashtag: 
+        current_count += count 
+    else: 
+        if current_hashtag: 
+            print(f"{current_hashtag}\t{current_count}") 
+        current_hashtag = hashtag 
+        current_count = count 
+ 
+if current_hashtag == hashtag: 
+    print(f"{current_hashtag}\t{current_count}") 
+ 
+Command: 
+C:\Windows\system32>hdfs dfs -mkdir /ex8 
+C:\Windows\system32>hdfs dfs -put D:\twitter_data.txt /ex8 
+C:\Windows\system32>hdfs dfs -put D:\twitter_mapper.py /ex8 
+C:\Windows\system32>hdfs dfs -put D:\twitter_reducer.py /ex8 
+C:\Windows\system32>hadoop jar C:\hadoop\share\hadoop\tools\lib\hadoop-streaming
+3.2.4.jar ^ 
+More?   -input /ex8/twitter_data.txt ^ 
+More?   -output /twitter_output ^ 
+More?   -mapper /twitter_mapper.py ^ 
+More?   -reducer /twitter_reducer.py 

@@ -1,0 +1,40 @@
+Start Hadoop Daemons: 
+C:\Windows\system32>start-all 
+This script is Deprecated. Instead use start-dfs.cmd and start-yarn.cmd 
+starting yarn daemons 
+ 
+C:\Windows\system32>jps 
+2832 ResourceManager 
+10328 DataNode 
+12936 NodeManager 
+6504 NameNode 
+10012 Jps 
+ 
+ENABLE HADOOP INTERFACE 
+Open Browser and enable “localhost:9870” 
+ 
+ENABLE HADOOP ALL APPLICATION 
+Open Browser and enable “localhost:8088” 
+ 
+ 
+Adding files and directories: 
+1. Directory 
+C:\Windows\system32>hdfs dfs -mkdir /HADOOP 
+2. Files 
+C:\Windows\system32>hdfs dfs -put D:\example.txt /HADOOP 
+Retrieving files: 
+C:\Windows\system32>hdfs dfs -get /HADOOP /example.txt D:\ 
+get: `/example.txt': No such file or directory 
+View Data from the file: 
+C:\Windows\system32>hdfs dfs -cat /HADOOP/example.txt 
+hi 
+hello everyone 
+how are you? 
+Deleting files and directories: 
+1. File 
+C:\Windows\system32>hdfs dfs -rm -r /HADOOP/example.txt 
+Deleted /HADOOP/example.txt 
+2. Directory 
+C:\Windows\system32>hdfs dfs -rm -r /HADOOP 
+Deleted /HADOOP 
+ 

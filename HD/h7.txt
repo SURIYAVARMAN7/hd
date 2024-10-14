@@ -1,0 +1,46 @@
+electricity.txt 
+2020,5000 
+2020,6000 
+2021,5500 
+2021,7000 
+ 
+electricity_mapper.py 
+import sys 
+for line in sys.stdin: 
+    line = line.strip() 
+    year, consumption = line.split(',') 
+    print(f"{year}\t{consumption}") 
+ 
+electricity_reducer.py 
+import sys 
+current_year = None 
+max_consumption = 0 
+ 
+for line in sys.stdin: 
+    line = line.strip() 
+    year, consumption = line.split('\t') 
+    consumption = int(consumption) 
+ 
+    if current_year == year: 
+        if consumption > max_consumption: 
+            max_consumption = consumption 
+    else: 
+        if current_year: 
+            print(f"{current_year}\t{max_consumption}") 
+        current_year = year 
+        max_consumption = consumption 
+ 
+if current_year == year: 
+    print(f"{current_year}\t{max_consumption}") 
+ 
+Command: 
+C:\Windows\system32>hdfs dfs -mkdir /ex7 
+C:\Windows\system32>hdfs dfs -put D:\electricity.txt /ex7 
+C:\Windows\system32>hdfs dfs -put D:\electricity_mapper.py /ex7 
+C:\Windows\system32>hdfs dfs -put D:\electricity_reducer.py /ex7 
+C:\Windows\system32>hadoop jar C:\hadoop\share\hadoop\tools\lib\hadoop-streaming
+3.2.4.jar ^ 
+More?   -input /ex7/electricity.txt ^ 
+More?   -output /electricity_output ^ 
+More?   -mapper /electricity_mapper.py ^ 
+More?   -reducer /electricity_reducer.py 

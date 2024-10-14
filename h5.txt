@@ -1,0 +1,53 @@
+ 
+MatrixA.txt 
+1,2,3 
+4,5,6 
+ 
+MatrixB.txt 
+7,8 
+9,10 
+11,12 
+ 
+matrix_mapper.py 
+import sys 
+for line in sys.stdin: 
+    line = line.strip() 
+    elements = line.split() 
+    if elements[0] == "A": 
+        print(f"{elements[1]}\t{elements[2]}\t{elements[3]}\tA") 
+    else: 
+        print(f"{elements[2]}\t{elements[1]}\t{elements[3]}\tB") 
+ 
+matrix_reducer.py 
+import sys 
+from collections import defaultdict 
+ 
+MatrixA = defaultdict(list) 
+MatrixB = defaultdict(list)s 
+ 
+for line in sys.stdin: 
+    line = line.strip() 
+    i, j, value, Matrix = line.split() 
+    if Matrix == "A": 
+        MatrixA[int(i)].append((int(j), int(value))) 
+    else: 
+        MatrixB[int(j)].append((int(i), int(value))) 
+ 
+for i in MatrixA: 
+    for a_col, a_value in MatrixA[i]: 
+        for b_row, b_value in MatrixB[a_col]: 
+            print(f"{i},{b_row}\t{a_value * b_value}") 
+ 
+Command: 
+C:\Windows\system32>hdfs dfs -mkdir /ex5 
+C:\Windows\system32>hdfs dfs -put D:\MatrixA.txt /ex5 
+C:\Windows\system32>hdfs dfs -put D:\MatrixB.txt /ex5 
+C:\Windows\system32>hdfs dfs -put D:\matrix_mapper.py /ex5 
+C:\Windows\system32>hdfs dfs -put D:\matrix_reducer.py /ex5 
+C:\Windows\system32>hadoop jar C:\hadoop\share\hadoop\tools\lib\hadoop-streaming
+3.2.4.jar ^ 
+More?   -input /ex5/MatrixA.txt ^ 
+More?   -input /ex5/MatrixB.txt ^ 
+More?   -output /Matrix_output ^ 
+More?   -mapper /matrix_mapper.py ^ 
+More?   -reducer /matrix_reducer.py

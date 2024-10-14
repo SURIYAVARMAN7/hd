@@ -1,0 +1,11 @@
+PROGRAM: 
+example.txt 
+hi  
+hello everyone 
+how are you? 
+ 
+Command: 
+C:\Windows\system32>hdfs dfs -mkdir /ex3 
+C:\Windows\system32>hdfs dfs -put D:\example.txt /ex3 
+C:\Windows\system32>hadoop jar C:\hadoop\share\hadoop\mapreduce\hadoop-mapreduce
+examples-3.2.4.jar wordcount /ex3/example.txt /output 
